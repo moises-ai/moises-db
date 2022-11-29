@@ -3,6 +3,8 @@ import librosa
 import json
 import yaml
 import fsspec
+import soundfile as sf
+from io import BytesIO
 
 
 def load_json(path):
@@ -16,6 +18,17 @@ def load_audio(path, fsspec_kwargs={}, **kwargs):
     if samples[0].ndim < 2:
         samples[0] = samples[0][None, ...].repeat(2, axis=0)
     return samples
+
+
+def save_audio(path, audio, **kwargs):
+    wav_io = BytesIO()
+    sf.write(wav_io, audio.T, 
+            samplerate=kwargs.pop('sr', 44100),
+            subtype=kwargs.pop('subtype', 'PCM_24'),
+            format=kwargs.pop('format', 'wav'),
+            **kwargs)
+    with fsspec.open(path, mode='wb') as f:
+        f.write(wav_io.getbuffer())
 
 
 def get_fs(path):

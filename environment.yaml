@@ -1,0 +1,22 @@
+name: moisesdb
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - gxx_linux-64=11.2.0
+  - libffi=3.3
+  - ffmpeg=4.3.1
+  - numpy=1.23.1
+  - pip=22.2.2
+  - python=3.8.5
+  - wheel=0.37.1
+  - libsndfile=1.0.31
+  - pip:
+    - scipy==1.9.3
+    - librosa==0.9.2
+    - pandas==1.5.1
+    - tqdm==4.64.1
+    - fsspec==2022.8.2
+    - gcsfs==2022.8.2
