@@ -1,7 +1,7 @@
 # moises-db
 Moises Source Separation Public Dataset
 
-# Download and Configure Environment Variable
+# Download the data
 
 Please download the dataset at `research.moises.ai`, extract it and configure the environment variable `MOISESDB_PATH` accordingly.
 
@@ -11,7 +11,7 @@ export MOISESDB_PATH=./moises-db-data
 
 # Install
 
-You can install this package with 
+You can install this package with
 
 ```
 pip install git@github.com:moises-ai/moises-db.git
@@ -58,8 +58,9 @@ The `MoisesDBTrack` object also contains other non-audio information from the tr
 - `track.name`
 - `track.genre`
 - `track.sources`
+- `track.activity`
 
-The stems and audio are computed on-the-fly. You can create a stems version only of the dataset using the `save_stems` method of the `MoisesDBTrack`.
+The stems and mixture are computed on-the-fly. You can create a stems-only version of the dataset using the `save_stems` method of the `MoisesDBTrack`.
 
 ```
 track = db[0]
