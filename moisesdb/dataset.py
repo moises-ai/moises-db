@@ -1,8 +1,10 @@
 import os
 import fsspec
+from tqdm import tqdm
 from moisesdb.utils import get_fs
 from moisesdb.defaults import default_data_path, default_sample_rate
 from moisesdb.track import MoisesDBTrack
+from concurrent.futures import ThreadPoolExecutor
 
 
 class MoisesDB:
@@ -21,29 +23,55 @@ class MoisesDB:
     def get_providers_tracks(self, provider):
         fs = get_fs(self.data_path)
         providers_tracks = [
-            os.path.basename(p) for p in fs.ls(os.path.join(self.data_path, provider))
+            os.path.basename(p) 
+            for p in fs.ls(os.path.join(self.data_path, provider))
         ]
-        return [
-            t
-            for t in providers_tracks
-            if fs.exists(os.path.join(self.data_path, provider, t, "data.json"))
-        ]
+        futures = []
+        with ThreadPoolExecutor() as executor:
+            for t in providers_tracks:
+                futures.append(
+                    executor.submit(
+                        fs.exists,
+                        os.path.join(self.data_path, provider, t, "data.json")
+                    )
+                )
+            track_exists = [f.result() for f in futures]
+        return [t for t, te in zip(providers_tracks, track_exists) if te]
 
     def get_tracks_list(self, providers_list):
-        return {p: self.get_providers_tracks(provider=p) for p in providers_list}
+        futures = []
+        with ThreadPoolExecutor() as executor:
+            for p in providers_list:
+                futures.append(
+                    executor.submit(
+                        self.get_providers_tracks,
+                        provider=p
+                    )
+                )
+        return {p: f.result() for p, f in zip(providers_list, futures)}
 
     def build_tracks(self, providers_tracks):
         tracks = {}
-        for provider, tracks_list in providers_tracks.items():
-            tracks[provider] = [
-                MoisesDBTrack(
-                    provider=provider,
-                    track_id=t,
-                    data_path=self.data_path,
-                    sample_rate=self.sample_rate,
+        with ThreadPoolExecutor() as executor:
+            for provider, tracks_list in providers_tracks.items():
+                futures = []
+                for t in tracks_list:
+                    futures.append(
+                        executor.submit(
+                            MoisesDBTrack,
+                            provider=provider,
+                            track_id=t,
+                            data_path=self.data_path,
+                            sample_rate=self.sample_rate,
+                        )
+                    )
+
+                itt = tqdm(
+                    futures,
+                    total=len(futures),
+                    desc='Loading tracks info from provider %s' % provider
                 )
-                for t in tracks_list
-            ]
+                tracks[provider] = [future.result() for future in itt]
         return tracks
 
     def build_flatten_map(self, tracks):
