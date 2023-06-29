@@ -1,20 +1,21 @@
-import yaml
 import setuptools
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
 
-def load_requirements(envpath='./environment.yaml'):
-    with open(envpath) as f:
-        env = yaml.safe_load(f)
-    return env['dependencies'][-1]['pip']
-
+with open("requirements.txt", "r") as f:
+    install_requires = f.read().splitlines()
 
 setuptools.setup(
-    name="MoisesDB",
-    version="0.0.1",
+    name="moises-db",
+    version="0.0.2",
     author="Igor Pereira",
     author_email="igor@moises.ai",
-    description="MoisesDB",
+    description="moises-db",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    url="https://github.com/moises-ai/moises-db",
     packages=setuptools.find_packages(),
-    install_requires=load_requirements(),
-    python_requires='>=3.8',
+    install_requires=install_requires,
+    python_requires=">=3.8",
 )
