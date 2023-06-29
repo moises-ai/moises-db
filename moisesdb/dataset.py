@@ -1,15 +1,17 @@
 import os
+from concurrent.futures import ThreadPoolExecutor
+
 import fsspec
 from tqdm import tqdm
-from moisesdb.utils import get_fs
+
 from moisesdb.defaults import default_data_path, default_sample_rate
 from moisesdb.track import MoisesDBTrack
-from concurrent.futures import ThreadPoolExecutor
+from moisesdb.utils import get_fs
 
 
 class MoisesDB:
     def __init__(self, data_path=default_data_path, sample_rate=default_sample_rate):
-        self.data_path = os.environ.get('MOISESDB_PATH', data_path)
+        self.data_path = os.environ.get("MOISESDB_PATH", data_path)
         self.sample_rate = sample_rate
         self.providers_list = self.get_providers(data_path)
         self.providers_tracks = self.get_tracks_list(self.providers_list)
@@ -23,8 +25,7 @@ class MoisesDB:
     def get_providers_tracks(self, provider):
         fs = get_fs(self.data_path)
         providers_tracks = [
-            os.path.basename(p) 
-            for p in fs.ls(os.path.join(self.data_path, provider))
+            os.path.basename(p) for p in fs.ls(os.path.join(self.data_path, provider))
         ]
         futures = []
         with ThreadPoolExecutor() as executor:
@@ -32,7 +33,7 @@ class MoisesDB:
                 futures.append(
                     executor.submit(
                         fs.exists,
-                        os.path.join(self.data_path, provider, t, "data.json")
+                        os.path.join(self.data_path, provider, t, "data.json"),
                     )
                 )
             track_exists = [f.result() for f in futures]
@@ -42,12 +43,7 @@ class MoisesDB:
         futures = []
         with ThreadPoolExecutor() as executor:
             for p in providers_list:
-                futures.append(
-                    executor.submit(
-                        self.get_providers_tracks,
-                        provider=p
-                    )
-                )
+                futures.append(executor.submit(self.get_providers_tracks, provider=p))
         return {p: f.result() for p, f in zip(providers_list, futures)}
 
     def build_tracks(self, providers_tracks):
@@ -69,7 +65,7 @@ class MoisesDB:
                 itt = tqdm(
                     futures,
                     total=len(futures),
-                    desc='Loading tracks info from provider %s' % provider
+                    desc="Loading tracks info from provider %s" % provider,
                 )
                 tracks[provider] = [future.result() for future in itt]
         return tracks

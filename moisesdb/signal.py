@@ -7,7 +7,7 @@ def pad_along_axis(array, target_length, axis=0):
         return array
     npad = [(0, 0)] * array.ndim
     npad[axis] = (0, pad_size)
-    return np.pad(array, pad_width=npad, mode='constant', constant_values=0)
+    return np.pad(array, pad_width=npad, mode="constant", constant_values=0)
 
 
 def hwr(x, floor=1e-7):
@@ -15,8 +15,7 @@ def hwr(x, floor=1e-7):
 
 
 def compute_nbwin(size, frame_length, hop_length):
-    nbwin = np.ceil(
-        (size - (frame_length - hop_length)) / hop_length).astype(int)
+    nbwin = np.ceil((size - (frame_length - hop_length)) / hop_length).astype(int)
     return nbwin
 
 
@@ -26,11 +25,10 @@ def compute_length(nbwin, frame_length, hop_length):
 
 
 def triangular_window(length, power=1.0):
-    window = np.concatenate([
-        np.arange(1, length // 2 + 1),
-        np.arange(length - length // 2, 0, -1)
-    ])
-    return (window / window.max())**power
+    window = np.concatenate(
+        [np.arange(1, length // 2 + 1), np.arange(length - length // 2, 0, -1)]
+    )
+    return (window / window.max()) ** power
 
 
 def frame_signal(x, frame_length, hop_length):
@@ -52,6 +50,6 @@ def unframe_signal(framed, hop_length, window_fn=triangular_window):
     reconstructed = np.zeros((*framed.shape[1:-1], signal_length))
     weights = np.zeros((*framed.shape[1:-1], signal_length))
     for ofidx, offset in enumerate(offsets):
-        reconstructed[..., offset:offset + nbsamples] += framed[ofidx]
-        weights[..., offset:offset + nbsamples] += win
+        reconstructed[..., offset : offset + nbsamples] += framed[ofidx]
+        weights[..., offset : offset + nbsamples] += win
     return reconstructed / weights
