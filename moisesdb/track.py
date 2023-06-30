@@ -32,21 +32,28 @@ class MoisesDBTrack:
         for stem in stems:
             unique_tracks = list({t["trackType"] for t in stem.get("tracks")})
             parsed_tracks = {t: [] for t in unique_tracks}
+            stem_name = stem.get("stemName")
             for track in stem.get("tracks", []):
                 file_path = (
                     os.path.join(
                         self.data_path,
                         self.provider,
                         self.id,
-                        stem.get("stemName"),
+                        stem_name,
                         track.get("id"),
                     )
                     + "."
                     + track.get("extension")
                 )
-                parsed_tracks[track["trackType"]].append(file_path)
+                track_type = track["trackType"]
+                parsed_tracks[track_type].append(file_path)
 
-            parsed_stems[stem.get("stemName")].update(parsed_tracks)
+            if parsed_stems[stem_name]:
+                for track_type, tracks in parsed_tracks.items():
+                    parsed_stems[stem_name].setdefault(track_type, []).extend(tracks)
+            else:
+                parsed_stems[stem_name].update(parsed_tracks)
+
         return parsed_stems
 
     def stem_sources(self, stem):
