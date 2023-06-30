@@ -15,13 +15,11 @@ def hwr(x, floor=1e-7):
 
 
 def compute_nbwin(size, frame_length, hop_length):
-    nbwin = np.ceil((size - (frame_length - hop_length)) / hop_length).astype(int)
-    return nbwin
+    return np.ceil((size - (frame_length - hop_length)) / hop_length).astype(int)
 
 
 def compute_length(nbwin, frame_length, hop_length):
-    length = hop_length * nbwin + (frame_length - hop_length)
-    return length
+    return hop_length * nbwin + (frame_length - hop_length)
 
 
 def triangular_window(length, power=1.0):
@@ -35,7 +33,6 @@ def frame_signal(x, frame_length, hop_length):
     n_frames = compute_nbwin(x.shape[-1], frame_length, hop_length)
     x = pad_along_axis(x, n_frames * hop_length, axis=-1)
     strides = np.array(x.strides)
-    new_stride = np.prod(strides[strides > 0])
     shape = list(x.shape)[:-1] + [frame_length, n_frames]
     strides = list(x.strides) + [hop_length * strides[-1]]
     return np.lib.stride_tricks.as_strided(x, shape, strides)

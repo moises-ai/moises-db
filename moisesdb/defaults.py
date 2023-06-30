@@ -69,7 +69,7 @@ taxonomy = {
     ],
 }
 
-all_stems = [t.replace(" ", "_") for t in taxonomy.keys()]
+all_stems = [t.replace(" ", "_") for t in taxonomy]
 
 mix_4_stems = {
     "vocals": ["vocals"],

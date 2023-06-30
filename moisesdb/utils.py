@@ -11,7 +11,9 @@ def load_json(path):
         return json.loads(f.read(-1))
 
 
-def load_audio(path, fsspec_kwargs={}, **kwargs):
+def load_audio(path, fsspec_kwargs=None, **kwargs):
+    if fsspec_kwargs is None:
+        fsspec_kwargs = {}
     with fsspec.open(path, "rb", **fsspec_kwargs) as f:
         samples = list(librosa.load(f, sr=None, mono=False, **kwargs))
     if samples[0].ndim < 2:

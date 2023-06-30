@@ -30,7 +30,7 @@ class MoisesDBTrack:
     def _parse_sources(self, stems):
         parsed_stems = {s.get("stemName"): {} for s in stems}
         for stem in stems:
-            unique_tracks = list(set([t["trackType"] for t in stem.get("tracks")]))
+            unique_tracks = list({t["trackType"] for t in stem.get("tracks")})
             parsed_tracks = {t: [] for t in unique_tracks}
             for track in stem.get("tracks", []):
                 file_path = (
@@ -55,7 +55,7 @@ class MoisesDBTrack:
         for source, paths in sources.items():
             source_audios = [load_audio(p) for p in paths]
             sample_rates = [s[1] for s in source_audios]
-            min_len = min([s[0].shape[-1] for s in source_audios])
+            min_len = min(s[0].shape[-1] for s in source_audios)
             sources_audio[source] = [
                 {"audio": s[0][..., :min_len], "sr": sr}
                 for s, sr in zip(source_audios, sample_rates)
@@ -77,8 +77,7 @@ class MoisesDBTrack:
 
     def stem_mixture(self, stem):
         sources_mixture = self.stem_sources_mixture(stem=stem)
-        all_sources = [s for s in sources_mixture.values()]
-        if all_sources:
+        if all_sources := list(sources_mixture.values()):
             return trim_and_mix(all_sources)
         else:
             return None
@@ -86,8 +85,8 @@ class MoisesDBTrack:
     def save_stems(self, path):
         for stem, audio in self.stems.items():
             if audio is not None:
-                filepath = os.path.join(path, stem + ".wav")
-                logger.info("Saving %s" % filepath)
+                filepath = os.path.join(path, f"{stem}.wav")
+                logger.info(f"Saving {filepath}")
                 save_audio(filepath, audio, sr=self.sr)
 
     def mix_stems(self, mix_map):
@@ -114,29 +113,23 @@ class MoisesDBTrack:
 
     @property
     def activity(self):
-        activity = {}
-        stems = self.stems
-        for stem, audio in self.stems.items():
-            activity[stem] = compute_activity_signal(audio[None, ...])[0]
-        return activity
+        return {
+            stem: compute_activity_signal(audio[None, ...])[0]
+            for stem, audio in self.stems.items()
+        }
 
 
 def pad_to_len(source, length):
-    if length > 0:
-        return np.pad(source, ((0, 0), (0, length)))
-    else:
-        return source
+    return np.pad(source, ((0, 0), (0, length))) if length > 0 else source
 
 
 def pad_and_mix(sources):
-    max_len = max([s.shape[-1] for s in sources])
+    max_len = max(s.shape[-1] for s in sources)
     pad_len = [max_len - s.shape[-1] for s in sources]
-    padded_mixtures = []
-    for s, p in zip(sources, pad_len):
-        padded_mixtures.append(pad_to_len(s, p))
+    padded_mixtures = [pad_to_len(s, p) for s, p in zip(sources, pad_len)]
     return np.stack(padded_mixtures).sum(0)
 
 
 def trim_and_mix(sources):
-    min_len = min([s.shape[-1] for s in sources])
+    min_len = min(s.shape[-1] for s in sources)
     return np.stack([s[..., :min_len] for s in sources]).sum(0)

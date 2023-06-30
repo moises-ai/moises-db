@@ -28,43 +28,43 @@ class MoisesDB:
         ]
         futures = []
         with ThreadPoolExecutor() as executor:
-            for t in providers_tracks:
-                futures.append(
-                    executor.submit(
-                        fs.exists,
-                        os.path.join(self.data_path, provider, t, "data.json"),
-                    )
+            futures.extend(
+                executor.submit(
+                    fs.exists,
+                    os.path.join(self.data_path, provider, t, "data.json"),
                 )
+                for t in providers_tracks
+            )
             track_exists = [f.result() for f in futures]
         return [t for t, te in zip(providers_tracks, track_exists) if te]
 
     def get_tracks_list(self, providers_list):
         futures = []
         with ThreadPoolExecutor() as executor:
-            for p in providers_list:
-                futures.append(executor.submit(self.get_providers_tracks, provider=p))
+            futures.extend(
+                executor.submit(self.get_providers_tracks, provider=p)
+                for p in providers_list
+            )
         return {p: f.result() for p, f in zip(providers_list, futures)}
 
     def build_tracks(self, providers_tracks):
         tracks = {}
         with ThreadPoolExecutor() as executor:
             for provider, tracks_list in providers_tracks.items():
-                futures = []
-                for t in tracks_list:
-                    futures.append(
-                        executor.submit(
-                            MoisesDBTrack,
-                            provider=provider,
-                            track_id=t,
-                            data_path=self.data_path,
-                            sample_rate=self.sample_rate,
-                        )
+                futures = [
+                    executor.submit(
+                        MoisesDBTrack,
+                        provider=provider,
+                        track_id=t,
+                        data_path=self.data_path,
+                        sample_rate=self.sample_rate,
                     )
-
+                    for t in tracks_list
+                ]
                 itt = tqdm(
                     futures,
                     total=len(futures),
-                    desc="Loading tracks info from provider %s" % provider,
+                    desc=f"Loading tracks info from provider {provider}",
                 )
                 tracks[provider] = [future.result() for future in itt]
         return tracks
