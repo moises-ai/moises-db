@@ -1,5 +1,3 @@
-import os
-
 default_sample_rate = 44100
 default_data_path = "gs://service-dataset-collection-new"
 

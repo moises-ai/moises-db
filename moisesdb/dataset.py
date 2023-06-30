@@ -1,7 +1,6 @@
 import os
 from concurrent.futures import ThreadPoolExecutor
 
-import fsspec
 from tqdm import tqdm
 
 from moisesdb.defaults import default_data_path, default_sample_rate

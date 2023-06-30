@@ -1,10 +1,8 @@
-import json
 import logging
 import os
 
 import librosa
 import numpy as np
-import yaml
 
 from moisesdb.activity import compute_activity_signal
 from moisesdb.defaults import all_stems, default_data_path

@@ -1,11 +1,9 @@
 import json
-import os
 from io import BytesIO
 
 import fsspec
 import librosa
 import soundfile as sf
-import yaml
 
 
 def load_json(path):

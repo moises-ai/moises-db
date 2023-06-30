@@ -1,8 +1,6 @@
 import numpy as np
 
 from moisesdb.signal import (
-    compute_length,
-    compute_nbwin,
     frame_signal,
     hwr,
     pad_along_axis,

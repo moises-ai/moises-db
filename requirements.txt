@@ -4,4 +4,3 @@ pandas>=1.5.1
 tqdm>=4.64.1
 fsspec>=2022.8.2
 gcsfs>=2022.8.2
-PyYAML>=5.4.1
