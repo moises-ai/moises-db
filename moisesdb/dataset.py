@@ -9,9 +9,12 @@ from moisesdb.utils import get_fs
 
 
 class MoisesDB:
-    def __init__(self, data_path=default_data_path, sample_rate=default_sample_rate):
+    def __init__(
+        self, data_path=default_data_path, sample_rate=default_sample_rate, quiet=False
+    ):
         self.data_path = os.environ.get("MOISESDB_PATH", data_path)
         self.sample_rate = sample_rate
+        self.quiet = quiet
         self.providers_list = self.get_providers(data_path)
         self.providers_tracks = self.get_tracks_list(self.providers_list)
         self.tracks = self.build_tracks(self.providers_tracks)
@@ -61,11 +64,14 @@ class MoisesDB:
                     )
                     for t in tracks_list
                 ]
-                itt = tqdm(
-                    futures,
-                    total=len(futures),
-                    desc=f"Loading tracks info from provider {provider}",
-                )
+                if self.quiet:
+                    itt = futures
+                else:
+                    itt = tqdm(
+                        futures,
+                        total=len(futures),
+                        desc=f"Loading tracks info from provider {provider}",
+                    )
                 tracks[provider] = [future.result() for future in itt]
         return tracks
 
