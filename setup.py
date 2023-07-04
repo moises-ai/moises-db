@@ -8,7 +8,7 @@ with open("requirements.txt", "r") as f:
 
 setuptools.setup(
     name="moises-db",
-    version="0.0.2",
+    version="0.0.3",
     author="Igor Pereira",
     author_email="igor@moises.ai",
     description="moises-db",
