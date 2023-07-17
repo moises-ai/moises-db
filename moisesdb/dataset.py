@@ -64,14 +64,12 @@ class MoisesDB:
                     )
                     for t in tracks_list
                 ]
-                if self.quiet:
-                    itt = futures
-                else:
-                    itt = tqdm(
-                        futures,
-                        total=len(futures),
-                        desc=f"Loading tracks info from provider {provider}",
-                    )
+                itt = tqdm(
+                    futures,
+                    total=len(futures),
+                    desc=f"Loading tracks info from provider {provider}",
+                    disable=self.quiet,
+                )
                 tracks[provider] = [future.result() for future in itt]
         return tracks
 
