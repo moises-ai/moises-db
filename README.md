@@ -26,7 +26,7 @@ moisesdb:
 You can install this package with
 
 ```
-pip install moisesdb
+pip install git+https://github.com/moises-ai/moises-db.git
 ```
 
 # Usage
