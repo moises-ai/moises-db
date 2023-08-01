@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "moises-db"
+version = "0.0.3"
+description = "moises-db"
+authors = ["Igor Pereira <igor@moises.ai>", "Vinícius Marques <vinicius.marques@moises.ai>"]
+readme = "README.md"
+homepage = "https://github.com/moises-ai/moises-db"
+license = "MIT"
+packages = [
+{ include = "moisesdb" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+scipy = ">=1.9.3"
+librosa = ">=0.9.2"
+pandas = ">=1.5.1"
+tqdm = ">=4.64.1"
+fsspec = ">=2022.8.2"
+gcsfs = ">=2022.8.2"
+
+[build-system]
+requires = ["poetry_core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
