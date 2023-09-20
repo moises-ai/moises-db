@@ -117,6 +117,7 @@ class MoisesDBTrack:
         stems = {}
         for stem, stem_sources in mix_map.items():
             stems_to_mix = [self.stem_mixture(s) for s in stem_sources]
+            stems_to_mix = [s for s in stems_to_mix if s is not None]
             stems[stem] = trim_and_mix(stems_to_mix)
         return stems
 
