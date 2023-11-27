@@ -1,5 +1,27 @@
+---
+language: 
+- en
+pretty_name: MoisesDB
+tags:
+- audio
+- music
+- source separation
+license: NC-RCL
+---
+
 # MoisesDB
 Moises Dataset for Source Separation
+
+### Dataset Description
+
+- **Homepage:** [MoisesDB homepage](https://developer.moises.ai/research/)
+- **Repository:** [MoisesDB repository](https://github.com/moises-ai/moises-db)
+- **Paper:** [Moisesdb: A dataset for source separation beyond 4-stems](https://arxiv.org/abs/2307.15913)
+- **Point of Contact:** [Igor Pereira](mailto:igor@moises.ai)
+
+### Dataset Summary
+
+MoisesDB is a dataset for source separation. It provides a collection of tracks and their separated stems (vocals, bass, drums, etc.). The dataset is used to evaluate the performance of source separation algorithms.
 
 # Download the data
 
