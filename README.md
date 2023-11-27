@@ -6,7 +6,9 @@ tags:
 - audio
 - music
 - source separation
-license: NC-RCL
+license: other
+license_name: ncrlc
+license_link: https://github.com/moises-ai/moises-db
 ---
 
 # MoisesDB
