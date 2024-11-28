@@ -7,7 +7,7 @@ tags:
 - music
 - source separation
 license: other
-license_name: CC BY-NC-SA 4.0
+license_name: cc-by-nc-sa-4.0
 license_link: https://creativecommons.org/licenses/by-nc-sa/4.0/
 ---
 
