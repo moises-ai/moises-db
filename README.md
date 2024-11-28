@@ -129,3 +129,5 @@ If you used the `MoisesDB` dataset on your research, please cite the following p
 `MoisesDB` is distributed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (CC BY-NC-SA 4.0).
 
 For the complete license terms, please visit: https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+See [LICENSE](LICENSE) file for details.
