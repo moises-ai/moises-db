@@ -16,7 +16,7 @@ Moises Dataset for Source Separation
 
 ### Dataset Description
 
-- **Homepage:** [MoisesDB homepage](https://developer.moises.ai/research/)
+- **Homepage:** [MoisesDB homepage](https://music.ai/research/)
 - **Repository:** [MoisesDB repository](https://github.com/moises-ai/moises-db)
 - **Paper:** [Moisesdb: A dataset for source separation beyond 4-stems](https://arxiv.org/abs/2307.15913)
 - **Point of Contact:** [Igor Pereira](mailto:igor@moises.ai)
@@ -27,11 +27,9 @@ MoisesDB is a dataset for source separation. It provides a collection of tracks 
 
 # Download the data
 
-Please download the dataset at our research [website](https://developer.moises.ai/research), extract it and configure the environment variable `MOISESDB_PATH` accordingly.
+Please download the dataset at our research [website](https://music.ai/research/), extract it and configure the environment variable `MOISESDB_PATH` accordingly.
 
-```
 export MOISESDB_PATH=./moises-db-data
-```
 
 The directory structure should be
 
@@ -43,6 +41,46 @@ moisesdb:
         .
         .
         .
+```
+
+### Dataset Integrity
+
+To verify the integrity of your downloaded dataset, you can check the following hashes:
+
+#### MoisesDB
+```
+MD5: 13cf74eda129c38b914a51ea79fb1778
+SHA256: 4cde33ce416ac7c868cffcb60eb31f5c741ab7ae5601cbb9d99ed498b72c48c1
+```
+
+#### Other dataset files available from Moises / Music.AI
+
+Just for reference, not directly related to the tools in this repo.
+
+SDXDB23_LabelNoise:
+```
+MD5: 629cfce51e4c8a36eae9c22aa5b710d3
+SHA256: f6d2eac4ee1e21bf8237c0dcef2f3ebb9d04001ff8f999e7528107246eee08e2
+```
+
+SDXDB23_Bleeding:
+
+```
+MD5: be3ffafbdccb46b91507f73c44dabe4a
+SHA256: b18a95da6b253bea986cf79990b6f2492d219871fdc17150ce599b45576d457e
+```
+
+#### How to Verify
+You can verify the integrity on Linux/Mac using:
+```bash
+md5sum moisesdb.zip
+sha256sum moisesdb.zip
+```
+
+Or on Windows using:
+```powershell
+Get-FileHash -Algorithm MD5 moisesdb.zip
+Get-FileHash -Algorithm SHA256 moisesdb.zip
 ```
 
 # Install
